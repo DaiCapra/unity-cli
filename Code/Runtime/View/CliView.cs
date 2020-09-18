@@ -32,7 +32,8 @@ namespace Cli.Code.Runtime.View
         [Space(10)] [SerializeField] private Button btnExit;
         [SerializeField] private Button btnSubmit;
 
-        private bool _initialized;
+        private bool _initializedCli;
+        private bool _initializedComponents;
         private Shortcut[] _shortcuts;
 
         private string _suggestCache;
@@ -41,16 +42,34 @@ namespace Cli.Code.Runtime.View
         private bool _isBrowsingHistory;
         private bool _ignoreSuggestions;
 
+
+        private void OnEnable()
+        {
+            InitComponents();
+        }
+
         public void Init(CliService cli)
         {
-            _cliService = cli;
-            _initialized = true;
+            if (cli == null)
+            {
+                return;
+            }
 
+            _cliService = cli;
             _cliService.DelMessageAdded += OnMessageAdded;
             _cliService.DelMessagesCleared += OnMessagesCleared;
 
-            suggestionComponent.CallbackSelection = OnSuggestionSelected;
+            _initializedCli = true;
+        }
 
+        private void InitComponents()
+        {
+            if (_initializedComponents)
+            {
+                return;
+            }
+
+            suggestionComponent.CallbackSelection = OnSuggestionSelected;
             prefabLine.gameObject.SetActive(false);
 
             input.DelTextChanged += OnInputChanged;
@@ -66,6 +85,7 @@ namespace Cli.Code.Runtime.View
             ClearInput();
             ClearMessages();
             ClearSuggestions();
+            _initializedComponents = true;
         }
 
 
@@ -184,7 +204,7 @@ namespace Cli.Code.Runtime.View
 
         public void ClearMessages()
         {
-            _cliService.Clear();
+            _cliService?.Clear();
         }
 
         private void OnMessagesCleared(Message message)
@@ -237,6 +257,11 @@ namespace Cli.Code.Runtime.View
 
         public void PopulateSuggestions()
         {
+            if (!_initializedCli)
+            {
+                return;
+            }
+
             var suggestions = _cliService.Suggest(_suggestCache);
             var hasSuggestions = suggestions.Count > 0;
 
@@ -262,6 +287,11 @@ namespace Cli.Code.Runtime.View
 
         public void AddMessage(string text, bool outbound = true)
         {
+            if (!_initializedCli)
+            {
+                return;
+            }
+
             _cliService.AddMessage(new Message()
             {
                 Text = text,
@@ -310,6 +340,11 @@ namespace Cli.Code.Runtime.View
 
         private void CycleHistory(int value)
         {
+            if (!_initializedCli)
+            {
+                return;
+            }
+
             if (_isBrowsingHistory)
             {
                 _indexHistory += value;
