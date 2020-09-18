@@ -23,13 +23,13 @@ namespace Cli.Code.Runtime.View
         {
             if (!_initialized)
             {
-                _initialized = true;
                 Init();
             }
         }
 
         private void Init()
         {
+            _initialized = true;
             _lines = new List<SuggestionLine>();
             prefabLine.gameObject.SetActive(false);
             Clear();
@@ -38,6 +38,10 @@ namespace Cli.Code.Runtime.View
 
         public void Clear()
         {
+            if (!_initialized)
+            {
+                return;
+            }
             _lines.Clear();
             if (parentLines == null)
             {

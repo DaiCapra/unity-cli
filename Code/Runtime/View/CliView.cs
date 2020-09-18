@@ -43,12 +43,12 @@ namespace Cli.Code.Runtime.View
 
         public void Init(CliService cli)
         {
-            this._cliService = cli;
+            _cliService = cli;
             _initialized = true;
 
             _cliService.DelMessageAdded += OnMessageAdded;
             _cliService.DelMessagesCleared += OnMessagesCleared;
-           
+
             suggestionComponent.CallbackSelection = OnSuggestionSelected;
 
             prefabLine.gameObject.SetActive(false);
@@ -65,11 +65,17 @@ namespace Cli.Code.Runtime.View
 
             ClearInput();
             ClearMessages();
+            ClearSuggestions();
         }
 
 
         private void OnDestroy()
         {
+            if (_cliService == null)
+            {
+                return;
+            }
+
             _cliService.DelMessagesCleared -= OnMessagesCleared;
             _cliService.DelMessageAdded -= OnMessageAdded;
         }
