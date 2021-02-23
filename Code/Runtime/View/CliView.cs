@@ -189,8 +189,11 @@ namespace Cli.Code.Runtime.View
 
             var isActive = parentContent.gameObject.activeSelf;
             Toggle(!isActive);
-            if (!isActive)
+
+            isActive = parentContent.gameObject.activeSelf;
+            if (isActive)
             {
+                ClearInput();
                 Focus();
             }
         }
