@@ -187,7 +187,12 @@ namespace Cli.Code.Runtime.View
                 return;
             }
 
-            Toggle(!parentContent.gameObject.activeSelf);
+            var isActive = parentContent.gameObject.activeSelf;
+            Toggle(!isActive);
+            if (!isActive)
+            {
+                Focus();
+            }
         }
 
         private void Focus()
