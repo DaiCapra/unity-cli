@@ -13,6 +13,9 @@ namespace Cli.Code.Runtime.View
     public class CliView : MonoBehaviour
     {
         public Action CallbackButtonExit { get; set; }
+        public Action CallbackToggleOn { get; set; }
+        public Action CallbackToggleOff { get; set; }
+
         private CliService _cliService;
 
         public Shortcut shortCutSubmit;
@@ -22,7 +25,7 @@ namespace Cli.Code.Runtime.View
 
         [SerializeField] private GameObject prefabLine;
         [SerializeField] private Transform parentLines;
-
+        [SerializeField] private Transform parentContent;
 
         [Header("Components")] [SerializeField]
         private InputComponent input;
@@ -157,6 +160,24 @@ namespace Cli.Code.Runtime.View
 
             input.Clear();
             Focus();
+        }
+
+        public void Toggle(bool isEnabled)
+        {
+            if (parentContent == null)
+            {
+                return;
+            }
+
+            parentContent.gameObject.SetActive(isEnabled);
+            if (isEnabled)
+            {
+                CallbackToggleOn?.Invoke();
+            }
+            else
+            {
+                CallbackToggleOff?.Invoke();
+            }
         }
 
         private void Focus()
