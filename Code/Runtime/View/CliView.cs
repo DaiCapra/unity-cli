@@ -180,6 +180,16 @@ namespace Cli.Code.Runtime.View
             }
         }
 
+        public void Toggle()
+        {
+            if (parentContent == null)
+            {
+                return;
+            }
+
+            Toggle(!parentContent.gameObject.activeSelf);
+        }
+
         private void Focus()
         {
             input.Select();
