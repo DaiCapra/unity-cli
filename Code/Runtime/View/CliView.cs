@@ -23,6 +23,7 @@ namespace Cli.Code.Runtime.View
         public Shortcut shortCutPrevious;
         public Shortcut shortCutNext;
 
+        public bool IsShowing => parentContent != null && parentContent.gameObject.activeSelf;
         [SerializeField] private GameObject prefabLine;
         [SerializeField] private Transform parentLines;
         [SerializeField] private Transform parentContent;
