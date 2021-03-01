@@ -46,6 +46,11 @@ namespace Cli.Code.Runtime.View
 
         public void SetPosition(Vector2 pos)
         {
+            if (_rectTransform == null)
+            {
+                return;
+            }
+
             _rectTransform.localPosition = pos;
         }
 
@@ -78,6 +83,11 @@ namespace Cli.Code.Runtime.View
 
         public void OnPositionChanged()
         {
+            if (_rectTransform == null)
+            {
+                return;
+            }
+
             CallbackPosition?.Invoke(_rectTransform.localPosition);
         }
     }

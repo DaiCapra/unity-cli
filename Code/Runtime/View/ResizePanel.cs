@@ -49,6 +49,11 @@ namespace Cli.Code.Runtime.View
 
         public void SetSize(Vector2 sizeDelta)
         {
+            if (panelRectTransform == null)
+            {
+                return;
+            }
+
             panelRectTransform.sizeDelta = sizeDelta;
         }
 
@@ -59,6 +64,11 @@ namespace Cli.Code.Runtime.View
 
         public void OnResize()
         {
+            if (panelRectTransform == null)
+            {
+                return;
+            }
+
             CallbackResize?.Invoke(panelRectTransform.sizeDelta);
         }
     }
