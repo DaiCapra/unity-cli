@@ -547,6 +547,8 @@ MonoBehaviour:
   suggestionComponent: {fileID: 7267217577358730370}
   btnExit: {fileID: 9091290752709983138}
   btnSubmit: {fileID: 4202719222978575648}
+  dragComponent: {fileID: 6752921334649578584}
+  resizeComponent: {fileID: 1740555106188599915}
 --- !u!114 &2787686000735190702
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,7 +6,6 @@ namespace Cli.Code.Runtime.View
 {
     public class ResizePanel : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
     {
-
         public Action<Vector2> CallbackResize { get; set; }
 
         public Vector2 minSize = new Vector2(100, 100);
@@ -43,10 +42,10 @@ namespace Cli.Code.Runtime.View
                 Mathf.Clamp(sizeDelta.x, minSize.x, maxSize.x),
                 Mathf.Clamp(sizeDelta.y, minSize.y, maxSize.y)
             );
-        
+
             SetSize(sizeDelta);
         }
-    
+
 
         public void SetSize(Vector2 sizeDelta)
         {
@@ -54,6 +53,11 @@ namespace Cli.Code.Runtime.View
         }
 
         public void OnPointerUp(PointerEventData eventData)
+        {
+            OnResize();
+        }
+
+        public void OnResize()
         {
             CallbackResize?.Invoke(panelRectTransform.sizeDelta);
         }

@@ -12,18 +12,22 @@ namespace Cli.Code.Runtime.View
 {
     public class CliView : MonoBehaviour
     {
+        public Action<ViewData> CallbackWindowChanged { get; set; }
         public Action CallbackButtonExit { get; set; }
         public Action CallbackToggleOn { get; set; }
         public Action CallbackToggleOff { get; set; }
 
-        private CliService _cliService;
+
+        public bool IsShowing => parentContent != null && parentContent.gameObject.activeSelf;
 
         public Shortcut shortCutSubmit;
         public Shortcut shortCutEscape;
         public Shortcut shortCutPrevious;
         public Shortcut shortCutNext;
 
-        public bool IsShowing => parentContent != null && parentContent.gameObject.activeSelf;
+        [HideInInspector] public ViewData viewData;
+
+
         [SerializeField] private GameObject prefabLine;
         [SerializeField] private Transform parentLines;
         [SerializeField] private Transform parentContent;
@@ -35,6 +39,11 @@ namespace Cli.Code.Runtime.View
         [SerializeField] private SuggestionComponent suggestionComponent;
         [Space(10)] [SerializeField] private Button btnExit;
         [SerializeField] private Button btnSubmit;
+
+        [Space(10)] [SerializeField] private DragComponent dragComponent;
+        [SerializeField] private ResizePanel resizeComponent;
+
+        private CliService _cliService;
 
         private bool _initializedCli;
         private bool _initializedComponents;
@@ -49,6 +58,8 @@ namespace Cli.Code.Runtime.View
 
         private void OnEnable()
         {
+            viewData = new ViewData();
+
             InitComponents();
         }
 
@@ -85,6 +96,18 @@ namespace Cli.Code.Runtime.View
             shortCutPrevious = new Shortcut(KeyCode.UpArrow) {Callback = OnPrevious};
             shortCutNext = new Shortcut(new[] {KeyCode.Tab, KeyCode.DownArrow}) {Callback = OnNext};
             _shortcuts = new[] {shortCutEscape, shortCutSubmit, shortCutPrevious, shortCutNext};
+
+            if (dragComponent)
+            {
+                dragComponent.CallbackPosition = OnPositionSet;
+                dragComponent.OnPositionChanged();
+            }
+
+            if (resizeComponent)
+            {
+                resizeComponent.CallbackResize = OnResize;
+                resizeComponent.OnResize();
+            }
 
             ClearInput();
             ClearMessages();
@@ -245,6 +268,42 @@ namespace Cli.Code.Runtime.View
         public void ClearMessages()
         {
             _cliService?.Clear();
+        }
+
+        public void SetPosition(Vector2 position)
+        {
+            if (dragComponent)
+            {
+                dragComponent.SetPosition(position);
+                OnWindowChanged();
+            }
+        }
+
+
+        public void SetSize(Vector2 size)
+        {
+            if (resizeComponent)
+            {
+                resizeComponent.SetSize(size);
+                OnWindowChanged();
+            }
+        }
+
+        private void OnWindowChanged()
+        {
+            CallbackWindowChanged?.Invoke(viewData);
+        }
+
+        private void OnResize(Vector2 size)
+        {
+            viewData.size = size;
+            OnWindowChanged();
+        }
+
+        private void OnPositionSet(Vector2 position)
+        {
+            viewData.position = position;
+            OnWindowChanged();
         }
 
         private void OnMessagesCleared(Message message)

@@ -16,13 +16,15 @@ namespace Cli.Code.Runtime.View
 
         public void OnEnable()
         {
-            if (!_initialized)
+            if (_initialized)
             {
-                _initialized = true;
-                _canvas = GetComponentInParent<Canvas>();
-                _canvasRect = _canvas.GetComponent<RectTransform>();
-                _rectTransform = GetComponent<RectTransform>();
+                return;
             }
+
+            _initialized = true;
+            _canvas = GetComponentInParent<Canvas>();
+            _canvasRect = _canvas.GetComponent<RectTransform>();
+            _rectTransform = GetComponent<RectTransform>();
         }
 
         public void OnDrag(PointerEventData data)
@@ -70,6 +72,11 @@ namespace Cli.Code.Runtime.View
         }
 
         public void OnPointerUp(PointerEventData eventData)
+        {
+            OnPositionChanged();
+        }
+
+        public void OnPositionChanged()
         {
             CallbackPosition?.Invoke(_rectTransform.localPosition);
         }
