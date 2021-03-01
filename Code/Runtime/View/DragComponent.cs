@@ -16,6 +16,11 @@ namespace Cli.Code.Runtime.View
 
         public void OnEnable()
         {
+            Init();
+        }
+
+        public void Init()
+        {
             if (_initialized)
             {
                 return;

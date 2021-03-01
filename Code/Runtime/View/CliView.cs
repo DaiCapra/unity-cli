@@ -99,12 +99,14 @@ namespace Cli.Code.Runtime.View
 
             if (dragComponent)
             {
+                dragComponent.Init();
                 dragComponent.CallbackPosition = OnPositionSet;
                 dragComponent.OnPositionChanged();
             }
 
             if (resizeComponent)
             {
+                resizeComponent.Init();
                 resizeComponent.CallbackResize = OnResize;
                 resizeComponent.OnResize();
             }

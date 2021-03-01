@@ -14,9 +14,22 @@ namespace Cli.Code.Runtime.View
         private RectTransform panelRectTransform;
         private Vector2 originalLocalPointerPosition;
         private Vector2 originalSizeDelta;
+        
+        private bool initialized;
 
-        void Awake()
+        void OnEnable()
         {
+            Init();
+        }
+
+        public void Init()
+        {
+            if (initialized)
+            {
+                return;
+            }
+
+            initialized = true;
             panelRectTransform = transform.parent.GetComponent<RectTransform>();
         }
 
